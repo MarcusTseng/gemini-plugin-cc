@@ -88,3 +88,10 @@ Check background jobs and retrieve output.
 ## How it works
 
 This plugin uses [acpx](https://github.com/acpx) to communicate with the local Gemini CLI over the Agent Client Protocol (ACP). Gemini CLI runs locally — no data is sent to external servers beyond what Gemini normally does.
+
+## Acknowledgements
+
+- [openai/codex-plugin-cc](https://github.com/openai/codex-plugin-cc) — plugin structure and command patterns this repo is modeled after
+- [beyond5959/acp-adapter](https://github.com/beyond5959/acp-adapter) — reference for understanding ACP internals and Gemini's native ACP support
+- [google-gemini/gemini-cli](https://github.com/google-gemini/gemini-cli) — the upstream Gemini CLI this plugin wraps
+- [acpx](https://github.com/acpx) — the ACP client used as the backend transport
