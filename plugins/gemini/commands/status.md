@@ -1,15 +1,10 @@
 ---
 description: Show running and recent Gemini background jobs
 argument-hint: ''
-allowed-tools: Bash(ls:*), Bash(acpx:*)
+allowed-tools: Bash(ls:*), Bash(acpx:*), Bash(echo:*), Bash(head:*)
 ---
 
 Show recent Gemini background jobs and active acpx sessions.
-
-Rules:
-- List recent job output files with timestamps.
-- List active acpx Gemini sessions.
-- Return results clearly formatted.
 
 Run:
 ```bash

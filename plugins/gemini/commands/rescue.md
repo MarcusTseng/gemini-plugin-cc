@@ -1,7 +1,7 @@
 ---
 description: Delegate an investigation, fix, or long-running task to Gemini
 argument-hint: '[--wait|--background] [--resume] [--fresh] [task description]'
-allowed-tools: Bash(acpx:*), Bash(mkdir:*), Bash(date:*), Bash(ls:*), AskUserQuestion
+allowed-tools: Bash(acpx:*), Bash(mkdir:*), Bash(date:*), Bash(ls:*), Bash(echo:*), AskUserQuestion
 ---
 
 Delegate a task to Gemini via a persistent acpx session. Gemini handles it independently.
@@ -20,7 +20,7 @@ Session handling:
 ```bash
 acpx gemini sessions list 2>/dev/null | head -5
 ```
-  Resume the most recent session by reusing it (omit `sessions new`).
+  Resume the most recent session (omit `sessions new`).
 - If `--fresh` is present, always create a new session.
 - If neither flag is present and this is clearly a follow-up ("continue", "keep going", "apply", "dig deeper"), ask once:
   - `Continue current Gemini session (Recommended)`

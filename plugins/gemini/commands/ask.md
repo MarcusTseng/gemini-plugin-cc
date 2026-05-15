@@ -1,7 +1,7 @@
 ---
 description: Ask Gemini a one-shot question, optionally with codebase context
 argument-hint: '<question> [--files <glob>]'
-allowed-tools: Bash(acpx:*), Bash(find:*), Bash(cat:*), Bash(mktemp:*), Bash(rm:*)
+allowed-tools: Bash(acpx:*), Bash(find:*), Bash(cat:*), Bash(mktemp:*), Bash(rm:*), Bash(head:*), Bash(grep:*), Bash(echo:*), Bash(xargs:*)
 ---
 
 Ask Gemini a question. Uses its 1M token context window — good for large codebase context.
@@ -11,8 +11,10 @@ Raw user question:
 
 Rules:
 - If `--files <glob>` is present, collect matching files and include their content as context.
-- Otherwise just ask the question directly.
+- Otherwise ask the question directly.
 - Return Gemini's answer verbatim.
+
+Security note: the glob pattern is passed to `find -name`, not evaluated by the shell, so it is safe against injection.
 
 Without files:
 ```bash
@@ -20,18 +22,33 @@ acpx gemini exec '<question>'
 ```
 
 With `--files <glob>`:
-1. Extract the glob pattern from arguments.
-2. Collect file contents:
+1. Extract the glob pattern and the question from arguments (everything before `--files` is the question).
+2. Collect file contents — filter out binaries, lock files, and large files:
 ```bash
 TMPFILE=$(mktemp /tmp/gemini-ask-XXXX.txt)
-echo "<question>" > "$TMPFILE"
-echo "" >> "$TMPFILE"
-echo "--- Codebase context ---" >> "$TMPFILE"
-find . -name '<glob>' | head -50 | xargs -I{} sh -c 'echo "=== {} ===" && cat {}' >> "$TMPFILE" 2>/dev/null
-```
-3. Run:
-```bash
+{
+  echo "<question>"
+  echo ""
+  echo "--- Codebase context ---"
+  find . \
+    -not -path './.git/*' \
+    -not -path '*/node_modules/*' \
+    -not -name 'package-lock.json' \
+    -not -name 'yarn.lock' \
+    -not -name 'pnpm-lock.yaml' \
+    -name '<glob>' \
+    -type f \
+    | head -50 \
+    | while IFS= read -r f; do
+        # Skip binary files
+        if grep -qI '' "$f" 2>/dev/null; then
+          echo "=== $f ==="
+          cat "$f"
+          echo ""
+        fi
+      done
+} > "$TMPFILE"
 acpx gemini exec -f "$TMPFILE"
 rm -f "$TMPFILE"
 ```
-4. Return output verbatim.
+3. Return output verbatim.

@@ -1,7 +1,7 @@
 ---
 description: Show the output of the latest (or a specific) background Gemini job
 argument-hint: '[job-name]'
-allowed-tools: Bash(ls:*), Bash(cat:*)
+allowed-tools: Bash(ls:*), Bash(cat:*), Bash(head:*), Bash(echo:*), Bash(xargs:*)
 ---
 
 Show the result of a background Gemini job.
@@ -23,7 +23,7 @@ Read latest:
 ls -t ~/.claude/gemini-jobs/ | head -1 | xargs -I{} cat ~/.claude/gemini-jobs/{}
 ```
 
-Read specific:
+Read specific (when job name provided):
 ```bash
 cat ~/.claude/gemini-jobs/<job-name>.txt
 ```
