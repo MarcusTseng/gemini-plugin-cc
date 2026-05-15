@@ -1,0 +1,21 @@
+{
+  "name": "gemini-local",
+  "owner": {
+    "name": "MarcusTseng"
+  },
+  "metadata": {
+    "description": "Gemini CLI plugin for Claude Code — delegate tasks and code reviews to Gemini via acpx.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "gemini",
+      "description": "Use Gemini from Claude Code to review code or delegate tasks via acpx.",
+      "version": "1.0.0",
+      "author": {
+        "name": "MarcusTseng"
+      },
+      "source": "./plugins/gemini"
+    }
+  ]
+}
